@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/ivanovichi123/Inventory_application#readme",
   "dependencies": {
+    "@sentry/node": "^10.73.0",
     "ejs": "^6.0.1",
     "express": "^5.2.1",
     "express-validator": "^7.3.2",
