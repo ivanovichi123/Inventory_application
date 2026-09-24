@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="styleHeader.css">
+    <link rel="stylesheet" href="styleFooter.css">
     <link rel="icon" type="image/svg+xml" href="Logo.svg">
     <title>Inventory</title>
 </head>
@@ -13,10 +14,29 @@
         <%- include('header'); %>
     </header>
     <main>
-        <p>Dummy</p>
+        <div class="firstIndexPart">
+            <h3>Welcome...</h3>
+            <p>This page is an inventory app in which you will have to main items (author and book) in which you can add a new instance of those items.
+                You can also erase every item that you add and also update it in case you write wrong information.
+                Also you can create different categories in base of common things that your items have such as the genre of the book or the author. Just like the
+                items you can erase categories and update them in case you put wrong information. <br>
+                <span>ENJOY THE PAGE.</span>
+            </p>
+        </div>
+        <div class="secondIndexPart">
+            <h2>How to use the page</h2>
+            <p>To use this page is really simple, you just have to hover the mouse on the section of "categories" or "items" to check all the items
+                or the categories you already have. You can also click on the "Add book/category/author" texts to add what you want. Also you can click on 
+                the "inventory" title to return to this page. Finally, do not forget that you can update and create new items and categories. <br>
+                <span>Lets try to view all the books we have by just clicking the button</span>
+            </p>
+            <button>View books</button>
+            <img src="Logo.svg" alt="The_Logo_Face" class="theLogoFace">
+            <img src="Hand.svg" alt="The_Logo_Hand" class="theLogoHand">
+        </div>
     </main>
     <footer>
-        <p>Dummy</p>
+        <%- include('footer') %>
     </footer>
 </body>
 </html>

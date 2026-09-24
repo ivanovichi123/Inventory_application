@@ -1,6 +1,6 @@
 //Sentry start
 import "./instrument.js";
-import * as Sentry from "@sentry/node"
+import * as Sentry from "@sentry/node";
 //Sentry finish
 import express from "express";
 import path from "node:path";
@@ -22,7 +22,7 @@ Sentry.setupExpressErrorHandler(app);
 app.use(function onError(err, req, res, next) {
   res.statusCode = 500;
   res.end(res.sentry + "\n");
-})
+});
 //Sentry finish
 
 const PORT = 3000;

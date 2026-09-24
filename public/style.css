@@ -82,3 +82,99 @@ button {
 }
 
 /* end of the reset */
+
+.firstIndexPart {
+  display: grid;
+  grid-column: 1fr;
+  grid-row: 1fr 2fr;
+  padding: 2rem;
+  place-items: center;
+}
+
+.firstIndexPart > h3 {
+  font-size: 2.5rem;
+}
+
+.firstIndexPart > p {
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.firstIndexPart > p > span {
+  font-weight: bolder;
+}
+
+.secondIndexPart {
+  display: grid;
+  grid-template-columns: 2fr 0.5fr 0.5fr;
+  grid-template-rows: 0.5fr 2fr 0.5fr;
+  place-items: center;
+  padding: 2rem 2rem 3rem 2rem;
+  background-color: gray;
+}
+
+.secondIndexPart > h2 {
+  grid-column: 1/2;
+  grid-row: 1/2;
+  font-size: 2.5rem;
+}
+
+.secondIndexPart > p {
+  grid-column: 1/2;
+  grid-row: 2/3;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.secondIndexPart > p > span {
+  font-weight: bolder;
+}
+
+.secondIndexPart > button {
+  grid-column: 1/2;
+  grid-row: 3/4;
+  border: 1px solid black;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1.5rem;
+  padding: 5px;
+  width: 200px;
+  margin-top: 30px;
+  background-color: #f15726;
+}
+
+.theLogoFace {
+  grid-column: 3/4;
+  grid-row: 1/4;
+  align-self: end;
+  justify-self: start;
+  width: 300px;
+  height: 150px;
+}
+
+.theLogoHand {
+  grid-column: 2/3;
+  grid-row: 1/4;
+  align-self: end;
+  justify-self: end;
+  position: relative;
+  top: 50px;
+  width: 120px;
+  left: 120px;
+  animation: 3000ms ease-in-out infinite alternate handAnimation;
+}
+
+@keyframes handAnimation {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translate(0);
+  }
+  80% {
+    transform: translateX(-50vw);
+  }
+  100% {
+    transform: translateX(-50vw);
+  }
+}

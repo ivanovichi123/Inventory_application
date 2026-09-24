@@ -1,0 +1,32 @@
+.footerPart {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 0.5fr 1fr;
+  padding: 1rem;
+  border-top: solid black 5px;
+  background-color: aquamarine;
+}
+
+.footerPart > img {
+  width: 130px;
+  grid-column: 1/2;
+  grid-row: 2/3;
+  align-self: center;
+  justify-self: center;
+}
+
+.footerPart > h3 {
+  font-size: 2.5rem;
+  font-weight: bolder;
+  grid-column: 1/3;
+  grid-row: 1/2;
+  align-self: center;
+  justify-self: center;
+}
+
+.footerPart > ul {
+  grid-column: 2/3;
+  grid-row: 2/3;
+  align-self: self-end;
+  align-self: center;
+}

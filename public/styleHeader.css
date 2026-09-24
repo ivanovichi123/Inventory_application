@@ -19,47 +19,47 @@
 }
 
 nav.navMenu > ul {
-    color: black;
-    font-size: 1.5rem;
-    font-family: sans-serif;
-    margin-right: 20px;
+  color: black;
+  font-size: 1.5rem;
+  font-family: sans-serif;
+  margin-right: 20px;
 }
 
 .navMenu > ul > li {
-    list-style-type: none;
-    display: inline-block;
-    padding: 5px 25px;
-    position: relative;
+  list-style-type: none;
+  display: inline-block;
+  padding: 5px 25px;
+  position: relative;
 }
 
 .navMenu > ul > li:hover {
-    background-color: green;
+  background-color: green;
 }
 
 ul.subMenu {
-    position: absolute;
-    background-color: green;
-    list-style-type: none;
-    padding-left: 0;
-    margin-top: 2px;
-    margin-left: -25px;
-    width: 100%;
-    display: none;
-    cursor: pointer;
+  position: absolute;
+  background-color: green;
+  list-style-type: none;
+  padding-left: 0;
+  margin-top: 2px;
+  margin-left: -25px;
+  width: 100%;
+  display: none;
+  cursor: pointer;
 }
 
 ul.subMenu li {
-    padding-left: 25px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    border-top: 3px solid black;
+  padding-left: 25px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-top: 3px solid black;
 }
 
 .navMenu li:hover .subMenu {
-    display: block;
+  display: block;
 }
 
 ul.subMenu li:hover {
-    color: white;
-    background-color: black;
+  color: white;
+  background-color: black;
 }
