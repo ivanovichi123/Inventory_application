@@ -1,5 +1,5 @@
 .navMenu {
-  background-color: rgb(41, 220, 41);
+  background-color: rgb(97, 230, 97);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -33,12 +33,12 @@ nav.navMenu > ul {
 }
 
 .navMenu > ul > li:hover {
-  background-color: green;
+  background-color: rgb(30, 120, 30);
 }
 
 ul.subMenu {
   position: absolute;
-  background-color: green;
+  background-color: rgb(30, 120, 30);
   list-style-type: none;
   padding-left: 0;
   margin-top: 2px;

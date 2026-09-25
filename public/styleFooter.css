@@ -2,9 +2,8 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 0.5fr 1fr;
-  padding: 1rem;
-  border-top: solid black 5px;
-  background-color: aquamarine;
+  padding: 2rem;
+  background-color: #EDE8D0;
 }
 
 .footerPart > img {
