@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="viewStyle.css">
+    <link rel="stylesheet" href="styleHeader.css">
+    <link rel="stylesheet" href="styleFooter.css">
+    <link rel="icon" type="image/svg+xml" href="Logo.svg">
+    <title>Inventory</title>
+</head>
+<body>
+    <header>
+        <%- include('header'); %>
+    </header>
+    <main>
+        <% books.map((book) => { %>
+            <div class="itemInfo">
+                <img src="Placeholder_libro<%= book.bookimage %>.svg" alt="Placeholder image">
+                <h3><%= book.bookname %></h3>
+                <p class="syn"><span>Synopsis: </span><%= book.synopsis %></p>
+                <p class="gen"><span>Genre/s: </span> <% book.genrename.map((genre, index) => { %>
+                    <% if(index === book.genrename.length - 1)  { %>
+                        <%= genre %>
+                    <% }  else { %>
+                        <%= genre %>,
+                    <% } %> 
+                <% }) %></p>
+                <p class="aut"><span>Author: </span><%= book.authorname %></p>
+                <button class="deleteButton">Delete</button>
+                <button class="updateButton">Update</button>
+            </div>
+        <% }); %>
+    </main>
+    <footer>
+        <%- include('footer') %>
+    </footer>
+</body>
+</html>

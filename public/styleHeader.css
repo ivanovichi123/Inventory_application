@@ -13,6 +13,11 @@
   cursor: pointer;
 }
 
+a {
+  color: black;
+  text-decoration: none;
+}
+
 .navMenu > p {
   padding-left: 40px;
   cursor: pointer;
@@ -59,7 +64,10 @@ ul.subMenu li {
   display: block;
 }
 
-ul.subMenu li:hover {
-  color: white;
+ul.subMenu li:hover{
   background-color: black;
+}
+
+ul.subMenu li:hover a {
+  color: white;
 }

@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { userIndexGet, userFilterGet } from "../controllers/userController.js";
+import { userIndexGet, userBookGet } from "../controllers/userController.js";
 
 const userRouter = Router();
 
+userRouter.get("/books", userBookGet);
 userRouter.get("/", userIndexGet);
-userRouter.get("/:filter", userFilterGet);
+
 
 export default userRouter;
