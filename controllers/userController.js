@@ -1,4 +1,4 @@
-import { getAllBooks } from "../db/queries.js";
+import { getAllBooks, getAllAuthors } from "../db/queries.js";
 
 const userIndexGet = (req, res) => {
   console.log("Index get");
@@ -8,9 +8,18 @@ const userIndexGet = (req, res) => {
 async function userBookGet(req, res) {
   console.log("Get all books");
   let theBooks = await getAllBooks();
-  res.render("viewItems", {
+  res.render("viewBookItems", {
     books: theBooks,
   });
 };
 
-export { userIndexGet, userBookGet };
+async function userAuthorGet(req, res) {
+  console.log("Get all authors");
+  let theAuthors = await getAllAuthors();
+  console.log("aaa: ", theAuthors);
+  res.render("viewAuthorItem", {
+    authors: theAuthors,
+  });
+};
+
+export { userIndexGet, userBookGet,userAuthorGet };

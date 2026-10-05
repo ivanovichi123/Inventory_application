@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="viewAuthorStyle.css">
+    <link rel="stylesheet" href="styleHeader.css">
+    <link rel="stylesheet" href="styleFooter.css">
+    <link rel="icon" type="image/svg+xml" href="Logo.svg">
+    <title>Inventory</title>
+</head>
+<body>
+    <header>
+        <%- include('header'); %>
+    </header>
+    <main>
+        <% authors.map((author) => { %>
+            <div class="itemInfo">
+                <img src="placeholder_author<%= author.authorimage %>.svg" alt="Placeholder image">
+                <h3><%= author.authorname %></h3>
+                <p class="age"><span>Age: </span><%= author.authorage %></p>
+                <% let authorStatus = (author.authorstatus === true) ? "Alive" : "Dead"; %>
+                <p class="status"><span>Status: </span> <%= authorStatus %> </p>
+                <p class="bio"><span>Biography: </span><%= author.authorbio %></p>
+                <p class="books"><span>Books: </span> <% author.authorbooks.map((book, index) => { %>
+                    <% if(index === author.authorbooks.length - 1)  { %>
+                        <%= book %>
+                    <% }  else { %>
+                        <%= book %>,
+                    <% } %> 
+                <% }) %></p>
+                <button class="deleteButton">Delete</button>
+                <button class="updateButton">Update</button>
+            </div>
+        <% }); %>
+    </main>
+    <footer>
+        <%- include('footer') %>
+    </footer>
+</body>
+</html>

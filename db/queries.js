@@ -14,5 +14,18 @@ async function getAllBooks() {
     return rows;
 }
 
-export { getAllBooks };
+async function getAllAuthors() {
+    const { rows } = await pool.query("SELECT authors.name AS authorName, authors.age AS authorAge, authors.status AS authorStatus, authors.authorimage as authorImage, authors.bio AS authorBio ,ARRAY_AGG(books.name) AS authorbooks FROM authors"
+    + " LEFT JOIN book_author ON authors.id = book_author.author_id"
+    + " LEFT JOIN books ON book_author.book_id = books.id"
+    + " GROUP BY"
+    + " authorName,"
+    + " authorAge,"
+    + " authorStatus,"
+    + " authorImage,"
+    + " authorBio;");
+    return rows;
+}
+
+export { getAllBooks, getAllAuthors };
 
