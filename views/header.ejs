@@ -9,8 +9,9 @@
         <ul class="mainMenu">
             <li>Categories
                 <ul class="subMenu">
-                    <li>Comedy</li>
-                    <li>Horror</li>
+                    <% categories.map((category) =>  { %>
+                        <li><a href="/<%= category.category_name %>"><%= category.category_name %></a></li>
+                    <% }); %>
                 </ul>
                 <span>&#9660;</span>
             </li>

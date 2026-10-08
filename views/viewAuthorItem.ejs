@@ -11,7 +11,7 @@
 </head>
 <body>
     <header>
-        <%- include('header'); %>
+        <%- include('header', {categories: categories}); %>
     </header>
     <main>
         <% authors.map((author) => { %>
