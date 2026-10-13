@@ -8,9 +8,9 @@ import {
 
 const formRouter = Router();
 
-formRouter.get("/form/create/:type", formCreateGet);
-formRouter.post("/form/create/:type", formCreatePost);
-formRouter.get("/form/update/:type", formUpdateGet);
-formRouter.post("/form/update/:type", formUpdatePost);
+formRouter.get("/create/:type", formCreateGet);
+formRouter.post("/create/:type", formCreatePost);
+formRouter.get("/update/:type", formUpdateGet);
+formRouter.post("/update/:type", formUpdatePost);
 
 export default formRouter;

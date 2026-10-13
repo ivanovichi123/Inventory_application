@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/formAuthor.css">
+    <link rel="stylesheet" href="/styleHeader.css">
+    <link rel="stylesheet" href="/styleFooter.css">
+    <link rel="icon" type="image/svg+xml" href="/Logo.svg">
+    <title>Inventory</title>
+</head>
+<body>
+    <header>
+        <%- include('header', {categories: categories}); %>
+    </header>
+    <main>
+        <div class="theForm">
+            <h2>Let's add a new author</h2>
+            <%- include ("partials/errors.ejs") %>
+            <form method="POST" action="/form/create/author">
+                <label for="nameInput">Put author's name:<span>*</span></label>
+                <input name="nameInput" type="text" id="nameInput" maxlength="60" required placeholder="Juan Alfonso">
+                <label for="ageInput">Age of author:<span>*</span></label>
+                <input type="number" name="ageInput" id="ageInput" required min="0" max="120" placeholder="30">
+                <fieldset>
+                    <legend>Select the status of the author:<span>*</span></legend>
+                        <input type="radio" id="aliveRadio" name="statusAuthor" value="true" checked required>
+                        <label for="aliveRadio">Alive</label>
+                        <input type="radio" id="deadRadio" name="statusAuthor" value="false" required>
+                        <label for="deadRadio">Dead</label>
+                </fieldset>
+                <label for="bioInput">Write a short biography of the author (max 200 character):<span>*</span></label>
+                <textarea name="bioInput" id="bioInput" required maxlength="200" placeholder="A little biography"></textarea>
+                <button class="theSubmitButton" type="submit">Submit</button>
+            </form>
+        </div>
+    </main>
+    <footer>
+        <%- include('footer') %>
+    </footer>
+</body>
+</html>

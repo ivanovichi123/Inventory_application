@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="viewAuthorStyle.css">
-    <link rel="stylesheet" href="styleHeader.css">
-    <link rel="stylesheet" href="styleFooter.css">
-    <link rel="icon" type="image/svg+xml" href="Logo.svg">
+    <link rel="stylesheet" href="/viewAuthorStyle.css">
+    <link rel="stylesheet" href="/styleHeader.css">
+    <link rel="stylesheet" href="/styleFooter.css">
+    <link rel="icon" type="image/svg+xml" href="/Logo.svg">
     <title>Inventory</title>
 </head>
 <body>
@@ -16,7 +16,7 @@
     <main>
         <% authors.map((author) => { %>
             <div class="itemInfo">
-                <img src="placeholder_author<%= author.authorimage %>.svg" alt="Placeholder image">
+                <img src="/placeholder_author<%= author.authorimage %>.svg" alt="Placeholder image">
                 <h3><%= author.authorname %></h3>
                 <p class="age"><span>Age: </span><%= author.authorage %></p>
                 <% let authorStatus = (author.authorstatus === true) ? "Alive" : "Dead"; %>

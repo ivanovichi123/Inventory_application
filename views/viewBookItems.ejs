@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="viewBookStyle.css">
-    <link rel="stylesheet" href="styleHeader.css">
-    <link rel="stylesheet" href="styleFooter.css">
-    <link rel="icon" type="image/svg+xml" href="Logo.svg">
+    <link rel="stylesheet" href="/viewBookStyle.css">
+    <link rel="stylesheet" href="/styleHeader.css">
+    <link rel="stylesheet" href="/styleFooter.css">
+    <link rel="icon" type="image/svg+xml" href="/Logo.svg">
     <title>Inventory</title>
 </head>
 <body>
@@ -16,7 +16,7 @@
     <main>
         <% books.map((book) => { %>
             <div class="itemInfo">
-                <img src="Placeholder_libro<%= book.bookimage %>.svg" alt="Placeholder image">
+                <img src="/Placeholder_libro<%= book.bookimage %>.svg" alt="Placeholder image">
                 <h3><%= book.bookname %></h3>
                 <p class="syn"><span>Synopsis: </span><%= book.synopsis %></p>
                 <p class="gen"><span>Genre/s: </span> <% book.genrename.map((genre, index) => { %>

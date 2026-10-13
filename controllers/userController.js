@@ -41,23 +41,22 @@ async function userFilterGet(req, res) {
   console.log("Filter get");
   let { filter } = req.params;
   let theFilterGet = await getTheFilter(filter);
-  // console.log("filter: ", filter);
-  // console.log("The filter: ", theFilterGet);
-  // console.log("category filter: ", theFilterGet[0].category_filter);
-  // console.log("This is supossed to be books,: ", theFilterGet[0].category_filter[0][1]);
+
   if (theFilterGet[0].category_filter[0][1] === "books") {
     let theRealFilter = await getTheFilterBooks(
       theFilterGet[0].category_filter,
     );
-    console.log("theRealFilter: ", theRealFilter);
+
     res.render("viewBookItems", {
       categories: theCategories,
       books: theRealFilter,
     });
+
   } else if (theFilterGet[0].category_filter[0][1] === "authors") {
     let theRealFilter = await getTheFilterAuthors(
       theFilterGet[0].category_filter,
     );
+    
     res.render("viewAuthorItem", {
       categories: theCategories,
       authors: theRealFilter,

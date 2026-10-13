@@ -118,6 +118,17 @@ async function getTheFilterAuthors(filters) {
   return rows;
 }
 
+async function addOneAuthor(name, age, status, bio) {
+  let ageToNumber = parseInt(age);
+  let statusToBoolean = (status === 'true') ? true : false;
+  await pool.query(`
+    INSERT INTO authors (name, age, status, bio)
+    VALUES 
+      ($1, $2, $3, $4);
+    `, [name, ageToNumber, statusToBoolean, bio]);
+  return;
+}
+
 export {
   getAllBooks,
   getAllAuthors,
@@ -125,4 +136,5 @@ export {
   getTheFilter,
   getTheFilterBooks,
   getTheFilterAuthors,
+  addOneAuthor,
 };

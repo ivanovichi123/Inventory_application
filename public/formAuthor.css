@@ -1,0 +1,87 @@
+.theForm {
+    background-color: rgb(166, 193, 209);
+    margin: 2rem 25% 2rem 25%;
+    padding: 2rem;
+    border-radius: 25px;
+    box-shadow: 0 0 20px black;
+    border: solid black 1px;
+    /* display: flex;
+    flex-direction: column; */
+}
+
+.theForm > h2 {
+    text-align: center;
+    font-family: sans-serif;
+    font-weight: bolder;
+    font-size: 3.5rem;
+    /* margin-bottom: 1rem; */
+}
+
+.theForm > form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+label {
+    margin-top: 2.5rem;
+    font-size: 2rem;
+}
+
+#nameInput {
+    width: 100%;
+    font-size: 1.5rem;
+}
+
+#ageInput {
+    width: 100%;
+    font-size: 1.5rem;
+}
+
+fieldset {
+    margin-top: 2.5rem;
+    width: 100%;
+    font-size: 2rem;
+}
+
+#aliveRadio {
+    height: 20px;
+    width: 70px;
+}
+
+#deadRadio {
+    height: 20px;
+    width: 70px;
+    margin-left: 100px;
+}
+
+textarea {
+    margin-bottom: 2.5rem;
+}
+
+#bioInput {
+    width: 100%;
+    font-size: 1.5rem;
+}
+
+.theSubmitButton {
+    margin-top: 2.5rem;
+    border-radius: 25px;
+    font-family: sans-serif;
+    background-color: orange;
+    border: solid rgb(176, 48, 2) 2px;
+    cursor: pointer;
+}
+
+label > span {
+    color: red;
+}
+
+fieldset > legend > span {
+    color: red;
+}
+
+.formErrors {
+    font-size: 1.5rem;
+    color: red;
+}
