@@ -26,7 +26,13 @@
                         <%= genre %>,
                     <% } %> 
                 <% }) %></p>
-                <p class="aut"><span>Author: </span><%= book.authorname %></p>
+                <p class="aut"><span>Author/s: </span><% book.authorname.map((author, index) => { %>
+                    <% if (index === book.authorname.length - 1) { %>
+                        <%= author %>
+                    <% } else { %>
+                        <%= author %>,
+                    <% } %> 
+                <% }) %> </p>
                 <button class="deleteButton">Delete</button>
                 <button class="updateButton">Update</button>
             </div>

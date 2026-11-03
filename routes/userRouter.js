@@ -8,7 +8,6 @@ import {
 
 const userRouter = Router();
 
-
 userRouter.get("/books", userBookGet);
 userRouter.get("/authors", userAuthorGet);
 userRouter.get("/:filter", userFilterGet);

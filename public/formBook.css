@@ -1,0 +1,128 @@
+.theForm {
+  background-color: rgb(166, 193, 209);
+  margin: 2rem 25% 2rem 25%;
+  padding: 2rem;
+  border-radius: 25px;
+  box-shadow: 0 0 20px black;
+  border: solid black 1px;
+}
+
+.theForm > h2 {
+  text-align: center;
+  font-family: sans-serif;
+  font-weight: bolder;
+  font-size: 3.5rem;
+}
+
+.theForm > form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+label {
+  margin-top: 2.5rem;
+  font-size: 2rem;
+}
+
+#nameBookInput {
+  width: 100%;
+  font-size: 1.5rem;
+}
+
+#synBookInput {
+  width: 100%;
+  max-width: 100%;
+  font-size: 1.5rem;
+}
+
+fieldset {
+  margin-top: 2.5rem;
+  width: 100%;
+  font-size: 2rem;
+}
+
+fieldset > p {
+  font-size: 1rem;
+  margin-top: 20px;
+  text-align: center;
+  font-family: sans-serif;
+}
+
+fieldset > div > input {
+  height: 20px;
+  width: 50px;
+}
+
+textarea {
+  margin-bottom: 2.5rem;
+}
+
+.addGenreButtonDiv {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#futureNewGenres {
+  width: 100%;
+}
+
+.theDivNewGenre {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 0.4fr 0.2fr;
+}
+
+.nameNewGenreInput {
+  width: 100%;
+  height: 35px;
+  font-size: 1.5rem;
+  margin-left: 15px;
+  border-radius: 10px;
+  border: 1px solid black;
+  margin-top: 10px;
+}
+
+#newGenreDeleteButton {
+  width: 35px;
+  height: 35px;
+  margin-left: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 25px;
+  background-color: red;
+  border: 2px solid red;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.addNewGenreButton {
+  margin-top: 1rem;
+  border-radius: 25px;
+  font-family: sans-serif;
+  background-color: orange;
+  border: solid rgb(176, 48, 2) 2px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.theSubmitButton {
+  margin-top: 2.5rem;
+  border-radius: 25px;
+  font-family: sans-serif;
+  background-color: orange;
+  border: solid rgb(176, 48, 2) 2px;
+  cursor: pointer;
+}
+
+label > span {
+  color: red;
+}
+
+.formErrors {
+  font-size: 1.5rem;
+  color: red;
+}

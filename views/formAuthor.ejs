@@ -31,6 +31,16 @@
                 </fieldset>
                 <label for="bioInput">Write a short biography of the author (max 200 character):<span>*</span></label>
                 <textarea name="bioInput" id="bioInput" required maxlength="200" placeholder="A little biography"></textarea>
+                <fieldset>
+                    <legend>Select the book/s of the author:</legend>
+                    <% books.map((book) => { %>
+                        <div class="divAuthorCheckboxBook">
+                            <input type="checkbox" id="<%= book.name %>Checkbox" name="booksCheckbox" value="<%= book.id %>">
+                            <label for="<%= book.name %>Checkbox"><%= book.name %></label>
+                        </div>
+                    <% }) %>
+                    <p>If you can't find the book, you can add a new one by clicking the "Add book" button at the top of the page.</p>
+                </fieldset>
                 <button class="theSubmitButton" type="submit">Submit</button>
             </form>
         </div>

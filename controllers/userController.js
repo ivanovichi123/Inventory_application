@@ -19,6 +19,7 @@ async function userBookGet(req, res) {
   console.log("Get all books");
   let theBooks = await getAllBooks();
   let theCategories = await getAllCategories();
+  console.log(theBooks);
   res.render("viewBookItems", {
     categories: theCategories,
     books: theBooks,
@@ -29,7 +30,6 @@ async function userAuthorGet(req, res) {
   console.log("Get all authors");
   let theAuthors = await getAllAuthors();
   let theCategories = await getAllCategories();
-  console.log(theAuthors);
   res.render("viewAuthorItem", {
     categories: theCategories,
     authors: theAuthors,
@@ -51,12 +51,11 @@ async function userFilterGet(req, res) {
       categories: theCategories,
       books: theRealFilter,
     });
-
   } else if (theFilterGet[0].category_filter[0][1] === "authors") {
     let theRealFilter = await getTheFilterAuthors(
       theFilterGet[0].category_filter,
     );
-    
+
     res.render("viewAuthorItem", {
       categories: theCategories,
       authors: theRealFilter,

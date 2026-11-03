@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/formBook.css">
+    <link rel="stylesheet" href="/styleHeader.css">
+    <link rel="stylesheet" href="/styleFooter.css">
+    <link rel="icon" type="image/svg+xml" href="/Logo.svg">
+    <title>Inventory</title>
+</head>
+<body>
+
+    <script>
+        const totalNewGenreInputs = [];
+        function addNewGenre() {
+            if (totalNewGenreInputs.length !== 6) {
+                event.preventDefault();
+                let theNewGenreDiv = document.querySelector("#futureNewGenres");
+                let theTemporalDiv = document.createElement("div");
+                let theNewInput = document.createElement("input");
+                let theDeleteButton = document.createElement("button");
+                theTemporalDiv.setAttribute("class", "theDivNewGenre");
+                theNewInput.setAttribute("type", "text");
+                theNewInput.setAttribute("name", "nameNewGenreInput");
+                theNewInput.setAttribute("class", "nameNewGenreInput");
+                theNewInput.setAttribute("maxlength", "60");
+                theNewInput.setAttribute("required", "true");
+                theNewInput.setAttribute("placeholder", "New genre");
+                theDeleteButton.innerText = '\u{2715}';
+                theDeleteButton.setAttribute("id", "newGenreDeleteButton");
+                theDeleteButton.setAttribute("onclick", "deleteButton(this)");
+                theTemporalDiv.append(theNewInput, theDeleteButton);
+                theNewGenreDiv.append(theTemporalDiv);
+                totalNewGenreInputs.push('0');
+                return;
+            } else {
+                event.preventDefault();
+                return;
+            }
+
+        }
+
+        function deleteButton(element) {
+            event.preventDefault();
+            let theSoonDeleteParent = element.parentNode;
+            theSoonDeleteParent.remove();
+            totalNewGenreInputs.pop();
+            return;
+        }
+
+        function dumbFunction(event) {
+            event.preventDefault();
+            console.log("DUMB");
+        }
+    </script>
+
+    <header>
+        <%- include('header', {categories: categories}); %>
+    </header>
+    <main>
+        <div class="theForm">
+            <h2>Let's add a new book</h2>
+            <%- include ("partials/errors.ejs") %>
+            <form method="POST" action="/form/create/book">
+                <label for="nameBookInput">Put book's name:<span>*</span></label>
+                <input name="nameBookInput" type="text" id="nameBookInput" maxlength="50" required placeholder="A study in Scarlet">
+                <label for="synBookInput">Write a short synopsis of the book (max 200 character):<span>*</span></label>
+                <textarea name="synBookInput" id="synBookInput" required maxlength="200" placeholder="A little synopsis"></textarea>
+                <fieldset>
+                    <legend>Select the genre/s of the book:</legend>
+                    <% genres.map((genre) => { %>
+                        <div class="divBookCheckboxGenre">
+                            <input type="checkbox" id="<%= genre.name %>Checkbox" name="genresCheckbox" value="<%= genre.id %>">
+                            <label for="<%= genre.name %>Checkbox"><%= genre.name %></label>
+                        </div>
+                    <% }) %>
+                    <div id="futureNewGenres">
+                    </div>
+                    <p>If you can't find the book genre, you can add a new one by clicking the button.</p>
+                    <div class="addGenreButtonDiv">
+                        <button class="addNewGenreButton" onclick="addNewGenre()">Add Genre</button>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>Select the author/s of the book:</legend>
+                    <% authors.map((author) => { %>
+                        <div class="divBookCheckboxAuthor">
+                            <input type="checkbox" id="<%= author.name %>Checkbox" name="authorsCheckbox" value="<%= author.id %>">
+                            <label for="<%= author.name %>Checkbox"><%= author.name %></label>
+                        </div>
+                    <% }) %>
+                    <p>If you can't find the author, you can add a new one by clicking the "Add Author" button at the top of the page.</p>
+                </fieldset>
+                <button class="theSubmitButton" type="submit">Submit</button>
+            </form>
+        </div>
+    </main>
+    <footer>
+        <%- include('footer') %>
+    </footer>
+</body>
+</html>

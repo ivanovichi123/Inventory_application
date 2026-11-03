@@ -1,7 +1,8 @@
 import { Router } from "express";
 import {
   formCreateGet,
-  formCreatePost,
+  formAuthorCreatePost,
+  formBookCreatePost,
   formUpdateGet,
   formUpdatePost,
 } from "../controllers/formController.js";
@@ -9,7 +10,8 @@ import {
 const formRouter = Router();
 
 formRouter.get("/create/:type", formCreateGet);
-formRouter.post("/create/:type", formCreatePost);
+formRouter.post("/create/author", formAuthorCreatePost);
+formRouter.post("/create/book", formBookCreatePost);
 formRouter.get("/update/:type", formUpdateGet);
 formRouter.post("/update/:type", formUpdatePost);
 
