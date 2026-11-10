@@ -83,6 +83,16 @@ button {
 
 /* end of the reset */
 
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}
+
 .navMenu {
   background-color: rgb(97, 230, 97);
   display: flex;

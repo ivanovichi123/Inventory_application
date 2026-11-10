@@ -9,8 +9,14 @@ import {
   findBookBySynopsis,
   findAuthorByName,
   findAuthorByBiography,
+  getSpecificAuthorsName,
+  getSpecificAuthorsAge,
+  findCategoryByName,
+  findAuthorByAgeCheckbox,
+  findBookByGenreCheckbox,
+  findAuthorByNameCheckbox,
 } from "../db/queries.js";
-import { body, matchedData, validationResult } from "express-validator";
+import { body, matchedData, validationResult, oneOf } from "express-validator";
 
 const validateAuthor = [
   body("nameInput")
@@ -80,8 +86,92 @@ const validateBook = [
   body("authorsCheckbox"),
 ];
 
+const validateCategory = [
+  body("nameCategoryInput")
+    .trim()
+    .notEmpty()
+    .withMessage("Category name is required")
+    .isAlpha("es-ES", { ignore: " "})
+    .withMessage("Category name must only contain letters")
+    .isLength({min: 1, max: 15})
+    .withMessage("Category name must be between 1 and 15 characters")
+    .custom(async (value) => {
+      const existingCategoryName = await findCategoryByName(value);
+      if(existingCategoryName.length !== 0) {
+        throw new Error("Category name already in use");
+      }
+    }),
+  body("filterRadio")
+    .trim()
+    .notEmpty()
+    .withMessage("Category name is required")
+    .isIn(['books', 'authors'])
+    .withMessage("Valid values are books and authors"),
+  body("namesCheckbox")
+    .optional({ values: undefined })
+    .trim()
+    .isAlpha("es-ES", { ignore: " " })
+    .withMessage("Name/s must only contain letters")
+    .isLength({ min: 1, max: 60 })
+    .withMessage("Name/s must be between 1 and 60 characters")
+    .custom(async (value) => {
+    const validNameAuthor = await findAuthorByNameCheckbox(value);
+      if(validNameAuthor === 0) {
+        throw new Error("An author/s name does not exist")
+      }
+    }),
+  body("agesCheckbox")
+    .optional({values: undefined})
+    .trim()
+    .isNumeric()
+    .withMessage("Age must be a number")
+    .isInt({ min: 1, max: 120 })
+    .withMessage("Age must be between 1 and 120")
+    .custom(async (value) => {
+      const validateAgeAuthor = await findAuthorByAgeCheckbox(value);
+      if(validateAgeAuthor === 0) {
+        throw new Error("An age/s does not exist");
+      }
+    }),
+  body("statusCheckbox")
+    .optional({ values: undefined })
+    .trim()
+    .isIn(['true', 'false'])
+    .withMessage("Valid values are true and false"),
+  body("genresCheckbox")
+    .optional({values: undefined})
+    .trim()
+    .isAlpha("es-ES", { ignore: " " })
+    .withMessage("Genre must only contain letters")
+    .isLength({ min: 1, max: 60 })
+    .withMessage("Genre must be between 1 and 60 characters")
+    .custom(async (value) => {
+      const validateGenresBook = await findBookByGenreCheckbox(value);
+      if(validateGenresBook === 0) {
+        throw new Error("A genre/s does not exist")
+      }
+    }),
+    body().custom((value, { req }) => {
+      const filters = [
+          req.body.namesCheckbox,
+          req.body.agesCheckbox,
+          req.body.statusCheckbox,
+      ];
+
+      if (req.body.filterRadio === "books") {
+        filters.push(req.body.genresCheckbox);
+      }
+
+      if (!filters.some(filter => filter && filter.length > 0)) {
+        throw new Error("At least one valid filter must be provided");
+      }
+
+      return true;
+    }),
+];
+
 async function formCreateGet(req, res) {
-  console.log("get form author/book");
+  console.log("get form author/book/category");
   let theCategories = await getAllCategories();
   let { type } = req.params;
 
@@ -99,6 +189,17 @@ async function formCreateGet(req, res) {
       categories: theCategories,
       genres: theGenres,
       authors: theAuthors,
+    });
+  } else if (type === "category") {
+    console.log("I am in the category");
+    let theAuthorsNames = await getSpecificAuthorsName();
+    let theAuthorsAges = await getSpecificAuthorsAge();
+    let theGenresName = await getAllGenresName();
+    res.render("formCategory", {
+      categories: theCategories,
+      names: theAuthorsNames,
+      ages: theAuthorsAges,
+      genres: theGenresName,
     });
   }
 }
@@ -143,6 +244,7 @@ const formBookCreatePost = [
       let theCategories = await getAllCategories();
       let theGenres = await getAllGenresName();
       let theAuthors = await getAllAuthorsName();
+      console.log("errors array: ", errors.array());
       return res.status(400).render("formBook", {
         errors: errors.array(),
         categories: theCategories,
@@ -170,6 +272,32 @@ const formBookCreatePost = [
   },
 ];
 
+const formCategoryCreatePost = [
+  validateCategory,
+
+  async (req, res) => {
+    const errors = validationResult(req);
+    console.log(errors);
+    if(!errors.isEmpty()) {
+      console.log("I enter the error");
+      let theCategories = await getAllCategories();
+      let theAuthorsNames = await getSpecificAuthorsName();
+      let theAuthorsAges = await getSpecificAuthorsAge();
+      let theGenresName = await getAllGenresName();
+      console.log(errors.array());
+      return res.status(400).render("formCategory", {
+        errors: errors.array(),
+        categories: theCategories,
+        names: theAuthorsNames,
+        ages: theAuthorsAges,
+        genres: theGenresName,
+      });
+    }
+    console.log("matched data: ", matchedData(req));
+    res.redirect("/books");
+  }
+];
+
 const formUpdateGet = (req, res) => {
   res.render("formUpdate");
 };
@@ -182,6 +310,12 @@ export {
   formCreateGet,
   formAuthorCreatePost,
   formBookCreatePost,
+  formCategoryCreatePost,
   formUpdateGet,
   formUpdatePost,
 };
+
+
+// ACABO DE HACER LA VALIDACION PARA LAS CATEGORIAS Y CHECAR QUE FUNCIONE OESA SEGUIR COMO NORMALEMNTE L HARIA 
+// CAMBIAR LA VALIDACION DE LOS OTROS DOS FORMULARIOS PARA QUE NO SE CONFIE EN NADA DE LO QUE ME ENVIE EL USUARIO
+// CONTINUAR CON LOS BOTONES UPDATE Y DELETE

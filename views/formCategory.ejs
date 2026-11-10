@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/formCategory.css">
+    <link rel="stylesheet" href="/styleHeader.css">
+    <link rel="stylesheet" href="/styleFooter.css">
+    <link rel="icon" type="image/svg+xml" href="/Logo.svg">
+    <title>Inventory</title>
+</head>
+<body>
+    <header>
+        <%- include('header', {categories: categories}); %>
+    </header>
+    <main>
+        <div class="theForm">
+            <h2>Let's add a new Category</h2>
+            <%- include ("partials/errors.ejs") %>
+            <form method="POST" action="/form/create/category">
+                <label for="nameCategoryInput">Put the category's name:<span>*</span></label>
+                <input name="nameCategoryInput" type="text" id="nameCategoryInput" maxlength="15" placeholder="Mystery" required>
+                <fieldset>
+                    <legend>Select what items you want to filter:<span>*</span></legend>
+                    <div class="futureFiltersRadio">
+                        <input type="radio" name="filterRadio" id="filterBookRadio" value="books" required checked="checked" onclick="appearGenres()">
+                        <label for="filterBookRadio">Books</label>
+                    </div>
+                    <div class="futureFiltersRadio">
+                        <input type="radio" name="filterRadio" id="filterAuthorsBooks" value="authors" required onclick="disappearGenres()">
+                        <label for="filterAuthorsBooks">Authors</label>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>Select the names of the authors:</legend>
+                    <% names.map((name) => { %>
+                        <div class="divAuthorNameCheckbox">
+                            <input type="checkbox" id="<%= name.name %>Checkbox" name="namesCheckbox" value="<%= name.name %>">
+                            <label for="<%= name.name %>Checkbox"><%= name.name %></label>
+                        </div>
+                    <% }) %>
+                </fieldset>
+                <fieldset class="theAgesFieldset">
+                    <legend>Select the ages:</legend>
+                    <% ages.map((age) => { %>
+                        <div class="divAuthorsAgeCheckbox">
+                            <input type="checkbox" id="<%= age.age %>Checkbox" name="agesCheckbox" value="<%= age.age %>">
+                            <label for="<%= age.age %>Checkbox"><%= age.age %></label>
+                        </div>
+                    <% }) %>
+                </fieldset>
+                <fieldset>
+                    <legend>Select the status of the author:</legend>
+                        <div class="divAuthorsStatusCheckbox">
+                            <input type="checkbox" id="aliveCheckbox" name="statusCheckbox" value="true">
+                            <label for="aliveCheckbox">Alive</label>
+                        </div>
+                        <div class="divAuthorsStatusCheckbox">
+                            <input type="checkbox" id="deadCheckbox" name="statusCheckbox" value="false">
+                            <label for="deadCheckbox">Death</label>
+                        </div>
+                </fieldset>
+                <fieldset class="theGenresFieldset">
+                    <legend>Select the genres:</legend>
+                    <% genres.map((genre) => { %>
+                        <div class="divGneresCheckbox">
+                            <input type="checkbox" id="<%= genre.name %>Checkbox" name="genresCheckbox" value="<%= genre.name %>">
+                            <label for="<%= genre.name %>Checkbox"><%= genre.name %></label>
+                        </div>
+                    <% }) %>
+                </fieldset>
+                <button class="theSubmitButton" type="submit">Submit</button>
+            </form>
+        </div>
+    </main>
+    <footer>
+        <%- include('footer') %>
+    </footer>
+
+    <script defer>
+        let genresDisappear = false;
+        let theGenresFieldset = document.querySelector(".theGenresFieldset");
+
+        function disappearGenres() {
+            console.log("The authors were clicked");
+            console.log("the genres fieldset: ", theGenresFieldset);
+            const checkboxes = document.querySelectorAll('input[name="genresCheckbox"]');
+            console.log("Hey: ", checkboxes);
+            console.log(" WHAT IS HAPPENING")
+            for (let i = 0; i < checkboxes.length; i++) {
+                checkboxes[i].checked = false;
+            }
+            if(genresDisappear === false) {
+                theGenresFieldset.style.display = 'none';
+                genresDisappear = true;
+            }
+        }
+
+        function appearGenres() {
+            console.log("The books were clicked");
+            if(genresDisappear === true) {
+                theGenresFieldset.style.display = 'block';
+                genresDisappear = false;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -44,6 +44,7 @@ async function getTheFilter(filter) {
 }
 
 async function getTheFilterBooks(filters) {
+  let query = '';
   const conditions = [];
   const values = [];
 
@@ -61,17 +62,28 @@ async function getTheFilterBooks(filters) {
 
   const where = conditions.length ? `WHERE ${conditions.join(" AND ")}` : "";
 
-  const query = `
-    SELECT books.name AS bookName, books.synopsis, authors.name As authorName, ARRAY_AGG(genre.name) AS genreName, bookImage FROM books 
+  console.log("conditions: ", conditions);
+  console.log("values: ", values);
+  console.log("where: ", where);
+
+  console.log("filters: ", filters);
+
+  query = `
+    SELECT books.name AS bookName, books.synopsis, ARRAY_AGG(DISTINCT authors.name) As authorName, ARRAY_AGG(DISTINCT genre.name) AS genreName, bookImage FROM books 
       LEFT JOIN book_author ON books.id = book_author.book_id 
       LEFT JOIN authors ON author_id = authors.id 
       LEFT JOIN genre_book ON books.id = genre_book.book_id 
       LEFT JOIN genre ON genre_id = genre.id 
       ${where}
-      GROUP BY bookName, synopsis, authorName, bookImage;
+      GROUP BY bookName, synopsis, bookImage;
     `;
 
+
+  console.log("query: ", query);
+
   const { rows } = await pool.query(query, values);
+
+  console.log("rows: ", rows);
 
   return rows;
 }
@@ -395,6 +407,159 @@ async function findAuthorByBiography(biography) {
   return rows;
 }
 
+async function getSpecificAuthorsName() {
+  const { rows } = await pool.query(`
+    SELECT DISTINCT name FROM authors;
+    `);
+
+  return rows;
+}
+
+async function getSpecificAuthorsAge() {
+  const { rows } = await pool.query(`
+    SELECT DISTINCT age FROM authors;
+    `);
+
+  return rows;
+}
+
+async function findCategoryByName(name) {
+  const { rows } = await pool.query(`
+    SELECT category_name FROM categories
+      WHERE category_name = $1;
+    `, [name]);
+  
+  return rows;
+}
+
+async function findAuthorByAgeCheckbox(ages) {
+  console.log("ages: ", ages);
+  if(typeof ages === "string") {
+    const { rows } = await pool.query(`
+      SELECT authors.age FROM authors
+        WHERE authors.age = $1;
+      `, [ages]);
+    
+    console.log("The rows ages: ", rows);
+
+    if(rows.length === 0) {
+      return 0;
+    }
+    return 1;
+
+  } else {
+    const conditions = [];
+    const values = [];
+
+    for (let i = 0; i < ages.length; i++) {
+      values.push(ages[i]);
+      conditions.push(`authors.age = $${values.length}`);
+    }
+
+    const where = conditions.length ? `WHERE ${conditions.join(" OR ")}` : "";
+
+    const query = `
+      SELECT authors.age FROM authors
+        ${where}
+      `;
+
+    console.log("the ages query: ", query);
+
+    const { rows } = await pool.query(query, values);
+    if(rows.length !== values.length) {
+      return 0;
+    }
+    return 1;
+  }
+}
+
+async function findBookByGenreCheckbox(genres) {
+  console.log("genres: ", genres);
+  if(typeof genres === "string") {
+    const { rows } = await pool.query(`
+      SELECT genre.name FROM genre
+        WHERE genre.name = $1;
+      `, [genres]);
+    
+    console.log("The rows genres: ", rows);
+
+    if(rows.length === 0) {
+      return 0;
+    }
+    return 1;
+    
+  } else {
+    const conditions = [];
+    const values = [];
+
+    for (let i = 0; i < genres.length; i++) {
+      values.push(genres[i]);
+      conditions.push(`genre.name = $${values.length}`);
+    }
+
+    const where = conditions.length ? `WHERE ${conditions.join(" OR ")}` : "";
+
+    const query = `
+      SELECT genre.name FROM genre
+        ${where}
+      `;
+
+    console.log("the query genre: ", query);
+
+    const { rows } = await pool.query(query, values);
+
+    console.log("The rows genre: ", rows);
+    if(rows.length !== values.length) {
+      return 0;
+    }
+    return 1;
+  }
+}
+
+async function findAuthorByNameCheckbox(names) {
+  console.log("names: ", names);
+  if(typeof names === "string") {
+    const { rows } = await pool.query(`
+      SELECT authors.name FROM authors
+        WHERE authors.name = $1;
+      `, [names]);
+    
+    console.log("The rows names: ", names);
+
+    if(rows.length === 0) {
+      return 0;
+    }
+    return 1;
+    
+  } else {
+    const conditions = [];
+    const values = [];
+
+    for (let i = 0; i < names.length; i++) {
+      values.push(names[i]);
+      conditions.push(`authors.name = $${values.length}`);
+    }
+
+    const where = conditions.length ? `WHERE ${conditions.join(" OR ")}` : "";
+
+    const query = `
+      SELECT authors.name FROM authors
+        ${where}
+      `;
+
+    console.log("the query names: ", query);
+    console.log("the query values: ", values);
+
+    const { rows } = await pool.query(query, values);
+
+    console.log("The rows names: ", rows);
+    if(rows.length !== values.length) {
+      return 0;
+    }
+    return 1;
+  }
+}
+
 export {
   getAllBooks,
   getAllAuthors,
@@ -411,4 +576,10 @@ export {
   findBookBySynopsis,
   findAuthorByBiography,
   findAuthorByName,
+  getSpecificAuthorsAge,
+  getSpecificAuthorsName,
+  findCategoryByName,
+  findAuthorByAgeCheckbox,
+  findBookByGenreCheckbox,
+  findAuthorByNameCheckbox,
 };
