@@ -23,7 +23,7 @@ async function userBookGet(req, res) {
   res.render("viewBookItems", {
     categories: theCategories,
     books: theBooks,
-    type: "normal"
+    type: "normal",
   });
 }
 
@@ -60,7 +60,6 @@ async function userFilterGet(req, res) {
       books: theRealFilter,
       type: "filter",
     });
-
   } else if (theFilterGet[0].category_filter[0][1] === "authors") {
     console.log("I enter the authors");
     let theRealFilter = await getTheFilterAuthors(

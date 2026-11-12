@@ -45,21 +45,21 @@ async function getTheFilter(filter) {
 
 async function getTheFilterBooks(filters) {
   let conditionsAll = [];
-  let query = '';
+  let query = "";
   let authorConditions;
   let authorHelperConditions = [];
   let ageConditions;
   let ageHelperConditions = [];
   let statusConditions;
   let statusHelperConditions = [];
-  let genreConditions = ' ';
+  let genreConditions = " ";
   let theGenreTotal = 0;
   let genreHelperConditions = [];
   let theFinalValues = [];
 
-  for(const [filter, ...values] of filters) {
-    if(filter === "authors.name") {
-      for(let i = 0; i < values.length; i++) {
+  for (const [filter, ...values] of filters) {
+    if (filter === "authors.name") {
+      for (let i = 0; i < values.length; i++) {
         theFinalValues.push(values[i]);
         authorHelperConditions.push(`authors.name = $${theFinalValues.length}`);
       }
@@ -67,8 +67,8 @@ async function getTheFilterBooks(filters) {
       conditionsAll.push(authorConditions);
     }
 
-    if(filter === "authors.age") {
-      for(let i = 0; i < values.length; i++) {
+    if (filter === "authors.age") {
+      for (let i = 0; i < values.length; i++) {
         theFinalValues.push(values[i]);
         ageHelperConditions.push(`authors.age = $${theFinalValues.length}`);
       }
@@ -76,19 +76,20 @@ async function getTheFilterBooks(filters) {
       conditionsAll.push(ageConditions);
     }
 
-
-    if(filter === "authors.status") {
-      for(let i = 0; i < values.length; i++) {
+    if (filter === "authors.status") {
+      for (let i = 0; i < values.length; i++) {
         theFinalValues.push(values[i]);
-        statusHelperConditions.push(`authors.status = $${theFinalValues.length}`);
+        statusHelperConditions.push(
+          `authors.status = $${theFinalValues.length}`,
+        );
       }
       statusConditions = statusHelperConditions.join(" OR ");
       conditionsAll.push(statusConditions);
     }
 
-    if(filter === "genre.name") {
+    if (filter === "genre.name") {
       theGenreTotal = values.length;
-      for(let i = 0; i < values.length; i++) {
+      for (let i = 0; i < values.length; i++) {
         theFinalValues.push(values[i]);
         genreHelperConditions.push(`$${theFinalValues.length}`);
       }
@@ -96,20 +97,20 @@ async function getTheFilterBooks(filters) {
       genreConditions = `HAVING COUNT(DISTINCT genre.name)
        FILTER (WHERE genre.name IN (`.concat(genreConditions);
       theFinalValues.push(theGenreTotal);
-      genreConditions = genreConditions.concat(`)) = $${theFinalValues.length}`);
+      genreConditions = genreConditions.concat(
+        `)) = $${theFinalValues.length}`,
+      );
     }
   }
 
   let helperWhere = conditionsAll.join(" AND ");
-  let where = (conditionsAll.length !== 0) ? `WHERE `.concat(helperWhere) : ' ';
+  let where = conditionsAll.length !== 0 ? `WHERE `.concat(helperWhere) : " ";
 
   console.log("author conditions: ", authorConditions);
   console.log("age conditions: ", ageConditions);
   console.log("status conditions: ", statusConditions);
   console.log("genre conditions: ", genreConditions);
-  console.log("where: ", where)
-
-
+  console.log("where: ", where);
 
   console.log("filters: ", filters);
 
@@ -124,9 +125,8 @@ async function getTheFilterBooks(filters) {
       ${genreConditions}
     `;
 
-
   console.log("query: ", query);
-    console.log("values: ", theFinalValues);
+  console.log("values: ", theFinalValues);
 
   const { rows } = await pool.query(query, theFinalValues);
 
@@ -146,9 +146,9 @@ async function getTheFilterAuthors(filters) {
   let statusHelperConditions = [];
   let theFinalValues = [];
 
-  for(const [filter, ...values] of filters) {
-    if(filter === "authors.name") {
-      for(let i = 0; i < values.length; i++) {
+  for (const [filter, ...values] of filters) {
+    if (filter === "authors.name") {
+      for (let i = 0; i < values.length; i++) {
         theFinalValues.push(values[i]);
         authorHelperConditions.push(`authors.name = $${theFinalValues.length}`);
       }
@@ -156,8 +156,8 @@ async function getTheFilterAuthors(filters) {
       conditionsAll.push(authorConditions);
     }
 
-    if(filter === "authors.age") {
-      for(let i = 0; i < values.length; i++) {
+    if (filter === "authors.age") {
+      for (let i = 0; i < values.length; i++) {
         theFinalValues.push(values[i]);
         ageHelperConditions.push(`authors.age = $${theFinalValues.length}`);
       }
@@ -165,11 +165,12 @@ async function getTheFilterAuthors(filters) {
       conditionsAll.push(ageConditions);
     }
 
-
-    if(filter === "authors.status") {
-      for(let i = 0; i < values.length; i++) {
+    if (filter === "authors.status") {
+      for (let i = 0; i < values.length; i++) {
         theFinalValues.push(values[i]);
-        statusHelperConditions.push(`authors.status = $${theFinalValues.length}`);
+        statusHelperConditions.push(
+          `authors.status = $${theFinalValues.length}`,
+        );
       }
       statusConditions = statusHelperConditions.join(" OR ");
       conditionsAll.push(statusConditions);
@@ -178,12 +179,12 @@ async function getTheFilterAuthors(filters) {
 
   console.log("conditions all: ", conditionsAll);
   let helperWhere = conditionsAll.join(" AND ");
-  let where = (conditionsAll.length !== 0) ? `WHERE `.concat(helperWhere) : ' ';
+  let where = conditionsAll.length !== 0 ? `WHERE `.concat(helperWhere) : " ";
 
   console.log("author conditions: ", authorConditions);
   console.log("age conditions: ", ageConditions);
   console.log("status conditions: ", statusConditions);
-  console.log("where: ", where)
+  console.log("where: ", where);
 
   console.log("values: ", theFinalValues);
 
@@ -506,29 +507,34 @@ async function getSpecificAuthorsAge() {
 }
 
 async function findCategoryByName(name) {
-  const { rows } = await pool.query(`
+  const { rows } = await pool.query(
+    `
     SELECT category_name FROM categories
       WHERE category_name = $1;
-    `, [name]);
-  
+    `,
+    [name],
+  );
+
   return rows;
 }
 
 async function findAuthorByAgeCheckbox(ages) {
   console.log("ages: ", ages);
-  if(typeof ages === "string") {
-    const { rows } = await pool.query(`
+  if (typeof ages === "string") {
+    const { rows } = await pool.query(
+      `
       SELECT authors.age FROM authors
         WHERE authors.age = $1;
-      `, [ages]);
-    
+      `,
+      [ages],
+    );
+
     console.log("The rows ages: ", rows);
 
-    if(rows.length === 0) {
+    if (rows.length === 0) {
       return 0;
     }
     return 1;
-
   } else {
     const conditions = [];
     const values = [];
@@ -548,7 +554,7 @@ async function findAuthorByAgeCheckbox(ages) {
     console.log("the ages query: ", query);
 
     const { rows } = await pool.query(query, values);
-    if(rows.length !== values.length) {
+    if (rows.length !== values.length) {
       return 0;
     }
     return 1;
@@ -557,19 +563,21 @@ async function findAuthorByAgeCheckbox(ages) {
 
 async function findBookByGenreCheckbox(genres) {
   console.log("genres: ", genres);
-  if(typeof genres === "string") {
-    const { rows } = await pool.query(`
+  if (typeof genres === "string") {
+    const { rows } = await pool.query(
+      `
       SELECT genre.name FROM genre
         WHERE genre.name = $1;
-      `, [genres]);
-    
+      `,
+      [genres],
+    );
+
     console.log("The rows genres: ", rows);
 
-    if(rows.length === 0) {
+    if (rows.length === 0) {
       return 0;
     }
     return 1;
-    
   } else {
     const conditions = [];
     const values = [];
@@ -591,7 +599,7 @@ async function findBookByGenreCheckbox(genres) {
     const { rows } = await pool.query(query, values);
 
     console.log("The rows genre: ", rows);
-    if(rows.length !== values.length) {
+    if (rows.length !== values.length) {
       return 0;
     }
     return 1;
@@ -600,19 +608,21 @@ async function findBookByGenreCheckbox(genres) {
 
 async function findAuthorByNameCheckbox(names) {
   console.log("names: ", names);
-  if(typeof names === "string") {
-    const { rows } = await pool.query(`
+  if (typeof names === "string") {
+    const { rows } = await pool.query(
+      `
       SELECT authors.name FROM authors
         WHERE authors.name = $1;
-      `, [names]);
-    
+      `,
+      [names],
+    );
+
     console.log("The rows names: ", names);
 
-    if(rows.length === 0) {
+    if (rows.length === 0) {
       return 0;
     }
     return 1;
-    
   } else {
     const conditions = [];
     const values = [];
@@ -635,68 +645,91 @@ async function findAuthorByNameCheckbox(names) {
     const { rows } = await pool.query(query, values);
 
     console.log("The rows names: ", rows);
-    if(rows.length !== values.length) {
+    if (rows.length !== values.length) {
       return 0;
     }
     return 1;
   }
 }
 
-async function addOneCategory (categoryName, categoryFilter, categoryNameAuthor, categoryAgeAuthor, categoryStatusAuthor, categoryGenresBook) {
+async function addOneCategory(
+  categoryName,
+  categoryFilter,
+  categoryNameAuthor,
+  categoryAgeAuthor,
+  categoryStatusAuthor,
+  categoryGenresBook,
+) {
   let theCompleteArray = [];
   let nameAuthorArray = [];
   let ageAuthorArray = [];
   let statusAuthorArray = [];
   let genresBookArray = [];
 
-  if(categoryNameAuthor !== undefined) {
-    nameAuthorArray = (typeof(categoryNameAuthor) === 'object') ? categoryNameAuthor : [...nameAuthorArray, categoryNameAuthor];
+  if (categoryNameAuthor !== undefined) {
+    nameAuthorArray =
+      typeof categoryNameAuthor === "object"
+        ? categoryNameAuthor
+        : [...nameAuthorArray, categoryNameAuthor];
     console.log("Author array: ", nameAuthorArray);
-    nameAuthorArray.unshift('authors.name');
+    nameAuthorArray.unshift("authors.name");
     console.log("Authors array complete: ", nameAuthorArray);
     theCompleteArray.push(nameAuthorArray);
   }
 
-  if(categoryAgeAuthor !== undefined) {
-    ageAuthorArray = (typeof(categoryAgeAuthor) === 'object') ? categoryAgeAuthor : [...ageAuthorArray, categoryAgeAuthor];
+  if (categoryAgeAuthor !== undefined) {
+    ageAuthorArray =
+      typeof categoryAgeAuthor === "object"
+        ? categoryAgeAuthor
+        : [...ageAuthorArray, categoryAgeAuthor];
     console.log("Age array: ", ageAuthorArray);
-    ageAuthorArray.unshift('authors.age');
+    ageAuthorArray.unshift("authors.age");
     console.log("Ages array complete: ", ageAuthorArray);
     theCompleteArray.push(ageAuthorArray);
   }
 
-  if(categoryStatusAuthor !== undefined) {
+  if (categoryStatusAuthor !== undefined) {
     console.log("status: ", categoryStatusAuthor);
-    console.log("the object: ", typeof(categoryStatusAuthor));
-    statusAuthorArray = (typeof(categoryStatusAuthor) === 'object') ? categoryStatusAuthor : [...statusAuthorArray, categoryStatusAuthor];
+    console.log("the object: ", typeof categoryStatusAuthor);
+    statusAuthorArray =
+      typeof categoryStatusAuthor === "object"
+        ? categoryStatusAuthor
+        : [...statusAuthorArray, categoryStatusAuthor];
     console.log("status array: ", statusAuthorArray);
-    statusAuthorArray.unshift('authors.status');
+    statusAuthorArray.unshift("authors.status");
     console.log("Status array complete: ", statusAuthorArray);
     theCompleteArray.push(statusAuthorArray);
   }
 
-  if(categoryFilter === 'books') {
-    if(categoryGenresBook !== undefined) {
-      genresBookArray = (typeof(categoryGenresBook) === 'object') ? categoryGenresBook : [...genresBookArray,categoryGenresBook];
+  if (categoryFilter === "books") {
+    if (categoryGenresBook !== undefined) {
+      genresBookArray =
+        typeof categoryGenresBook === "object"
+          ? categoryGenresBook
+          : [...genresBookArray, categoryGenresBook];
       console.log("genres array: ", genresBookArray);
-      genresBookArray.unshift('genre.name');
+      genresBookArray.unshift("genre.name");
       console.log("Category array complete: ", genresBookArray);
       theCompleteArray.push(genresBookArray);
     }
   }
 
-  let theFilterAdd = (categoryFilter === 'books') ? ['table', 'books'] : ['table', 'authors'];
+  let theFilterAdd =
+    categoryFilter === "books" ? ["table", "books"] : ["table", "authors"];
   theCompleteArray.unshift(theFilterAdd);
   console.log("Array finally complete: ", theCompleteArray);
   console.log("category name: ", categoryName);
   let jsonArray = JSON.stringify(theCompleteArray);
   console.log("the json array: ", jsonArray);
 
-  await pool.query(`
+  await pool.query(
+    `
     INSERT INTO Categories (category_name, category_filter)
     VALUES
       ($1,$2)
-    `, [categoryName, jsonArray]);
+    `,
+    [categoryName, jsonArray],
+  );
 }
 
 export {

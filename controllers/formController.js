@@ -92,15 +92,16 @@ const validateCategory = [
     .trim()
     .notEmpty()
     .withMessage("Category name is required")
-    .isAlpha("es-ES", { ignore: " "})
+    .isAlpha("es-ES", { ignore: " " })
     .withMessage("Category name must only contain letters")
-    .isLength({min: 1, max: 15})
+    .isLength({ min: 1, max: 15 })
     .withMessage("Category name must be between 1 and 15 characters")
-    .not().isIn(['books', 'authors'])
+    .not()
+    .isIn(["books", "authors"])
     .withMessage("The category name can not be 'authors' or 'books'")
     .custom(async (value) => {
       const existingCategoryName = await findCategoryByName(value);
-      if(existingCategoryName.length !== 0) {
+      if (existingCategoryName.length !== 0) {
         throw new Error("Category name already in use");
       }
     }),
@@ -108,7 +109,7 @@ const validateCategory = [
     .trim()
     .notEmpty()
     .withMessage("Category name is required")
-    .isIn(['books', 'authors'])
+    .isIn(["books", "authors"])
     .withMessage("Valid values are books and authors"),
   body("namesCheckbox")
     .optional({ values: undefined })
@@ -118,13 +119,13 @@ const validateCategory = [
     .isLength({ min: 1, max: 60 })
     .withMessage("Author name/s must be between 1 and 60 characters")
     .custom(async (value) => {
-    const validNameAuthor = await findAuthorByNameCheckbox(value);
-      if(validNameAuthor === 0) {
-        throw new Error("An author/s name does not exist")
+      const validNameAuthor = await findAuthorByNameCheckbox(value);
+      if (validNameAuthor === 0) {
+        throw new Error("An author/s name does not exist");
       }
     }),
   body("agesCheckbox")
-    .optional({values: undefined})
+    .optional({ values: undefined })
     .trim()
     .isNumeric()
     .withMessage("Age must be a number")
@@ -132,17 +133,17 @@ const validateCategory = [
     .withMessage("Age must be between 1 and 120")
     .custom(async (value) => {
       const validateAgeAuthor = await findAuthorByAgeCheckbox(value);
-      if(validateAgeAuthor === 0) {
+      if (validateAgeAuthor === 0) {
         throw new Error("An age/s does not exist");
       }
     }),
   body("statusCheckbox")
     .optional({ values: undefined })
     .trim()
-    .isIn(['true', 'false'])
+    .isIn(["true", "false"])
     .withMessage("Valid values are true and false"),
   body("genresCheckbox")
-    .optional({values: undefined})
+    .optional({ values: undefined })
     .trim()
     .isAlpha("es-ES", { ignore: " " })
     .withMessage("Genre must only contain letters")
@@ -150,27 +151,27 @@ const validateCategory = [
     .withMessage("Genre must be between 1 and 60 characters")
     .custom(async (value) => {
       const validateGenresBook = await findBookByGenreCheckbox(value);
-      if(validateGenresBook === 0) {
-        throw new Error("A genre/s does not exist")
+      if (validateGenresBook === 0) {
+        throw new Error("A genre/s does not exist");
       }
     }),
-    body().custom((value, { req }) => {
-      const filters = [
-          req.body.namesCheckbox,
-          req.body.agesCheckbox,
-          req.body.statusCheckbox,
-      ];
+  body().custom((value, { req }) => {
+    const filters = [
+      req.body.namesCheckbox,
+      req.body.agesCheckbox,
+      req.body.statusCheckbox,
+    ];
 
-      if (req.body.filterRadio === "books") {
-        filters.push(req.body.genresCheckbox);
-      }
+    if (req.body.filterRadio === "books") {
+      filters.push(req.body.genresCheckbox);
+    }
 
-      if (!filters.some(filter => filter && filter.length > 0)) {
-        throw new Error("At least one valid filter must be provided");
-      }
+    if (!filters.some((filter) => filter && filter.length > 0)) {
+      throw new Error("At least one valid filter must be provided");
+    }
 
-      return true;
-    }),
+    return true;
+  }),
 ];
 
 async function formCreateGet(req, res) {
@@ -281,7 +282,7 @@ const formCategoryCreatePost = [
   async (req, res) => {
     const errors = validationResult(req);
     console.log(errors);
-    if(!errors.isEmpty()) {
+    if (!errors.isEmpty()) {
       console.log("I enter the error");
       let theCategories = await getAllCategories();
       let theAuthorsNames = await getSpecificAuthorsName();
@@ -305,9 +306,16 @@ const formCategoryCreatePost = [
       statusCheckbox,
       genresCheckbox,
     } = matchedData(req);
-    await addOneCategory(nameCategoryInput, filterRadio, namesCheckbox, agesCheckbox, statusCheckbox, genresCheckbox);
+    await addOneCategory(
+      nameCategoryInput,
+      filterRadio,
+      namesCheckbox,
+      agesCheckbox,
+      statusCheckbox,
+      genresCheckbox,
+    );
     res.redirect("/");
-  }
+  },
 ];
 
 const formUpdateGet = (req, res) => {
