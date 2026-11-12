@@ -146,6 +146,8 @@ ul.subMenu {
   width: 100%;
   display: none;
   cursor: pointer;
+  max-height: 200px;
+  overflow-y: auto;
 }
 
 ul.subMenu li {

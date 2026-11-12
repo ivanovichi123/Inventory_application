@@ -44,27 +44,72 @@ async function getTheFilter(filter) {
 }
 
 async function getTheFilterBooks(filters) {
+  let conditionsAll = [];
   let query = '';
-  const conditions = [];
-  const values = [];
+  let authorConditions;
+  let authorHelperConditions = [];
+  let ageConditions;
+  let ageHelperConditions = [];
+  let statusConditions;
+  let statusHelperConditions = [];
+  let genreConditions = ' ';
+  let theGenreTotal = 0;
+  let genreHelperConditions = [];
+  let theFinalValues = [];
 
-  for (const [filter, value] of filters) {
-    if (filter === "authors.name") {
-      values.push(value);
-      conditions.push(`authors.name = $${values.length}`);
+  for(const [filter, ...values] of filters) {
+    if(filter === "authors.name") {
+      for(let i = 0; i < values.length; i++) {
+        theFinalValues.push(values[i]);
+        authorHelperConditions.push(`authors.name = $${theFinalValues.length}`);
+      }
+      authorConditions = authorHelperConditions.join(" OR ");
+      conditionsAll.push(authorConditions);
     }
 
-    if (filter === "genre.name") {
-      values.push(value);
-      conditions.push(`$${values.length} IN (genre.name)`);
+    if(filter === "authors.age") {
+      for(let i = 0; i < values.length; i++) {
+        theFinalValues.push(values[i]);
+        ageHelperConditions.push(`authors.age = $${theFinalValues.length}`);
+      }
+      ageConditions = ageHelperConditions.join(" OR ");
+      conditionsAll.push(ageConditions);
+    }
+
+
+    if(filter === "authors.status") {
+      for(let i = 0; i < values.length; i++) {
+        theFinalValues.push(values[i]);
+        statusHelperConditions.push(`authors.status = $${theFinalValues.length}`);
+      }
+      statusConditions = statusHelperConditions.join(" OR ");
+      conditionsAll.push(statusConditions);
+    }
+
+    if(filter === "genre.name") {
+      theGenreTotal = values.length;
+      for(let i = 0; i < values.length; i++) {
+        theFinalValues.push(values[i]);
+        genreHelperConditions.push(`$${theFinalValues.length}`);
+      }
+      genreConditions = genreHelperConditions.join(" , ");
+      genreConditions = `HAVING COUNT(DISTINCT genre.name)
+       FILTER (WHERE genre.name IN (`.concat(genreConditions);
+      theFinalValues.push(theGenreTotal);
+      genreConditions = genreConditions.concat(`)) = $${theFinalValues.length}`);
     }
   }
 
-  const where = conditions.length ? `WHERE ${conditions.join(" AND ")}` : "";
+  let helperWhere = conditionsAll.join(" AND ");
+  let where = (conditionsAll.length !== 0) ? `WHERE `.concat(helperWhere) : ' ';
 
-  console.log("conditions: ", conditions);
-  console.log("values: ", values);
-  console.log("where: ", where);
+  console.log("author conditions: ", authorConditions);
+  console.log("age conditions: ", ageConditions);
+  console.log("status conditions: ", statusConditions);
+  console.log("genre conditions: ", genreConditions);
+  console.log("where: ", where)
+
+
 
   console.log("filters: ", filters);
 
@@ -75,41 +120,74 @@ async function getTheFilterBooks(filters) {
       LEFT JOIN genre_book ON books.id = genre_book.book_id 
       LEFT JOIN genre ON genre_id = genre.id 
       ${where}
-      GROUP BY bookName, synopsis, bookImage;
+      GROUP BY bookName, synopsis, bookImage
+      ${genreConditions}
     `;
 
 
   console.log("query: ", query);
+    console.log("values: ", theFinalValues);
 
-  const { rows } = await pool.query(query, values);
+  const { rows } = await pool.query(query, theFinalValues);
 
+  console.log("I got a correct query");
   console.log("rows: ", rows);
 
   return rows;
 }
 
 async function getTheFilterAuthors(filters) {
-  const conditions = [];
-  const values = [];
+  let conditionsAll = [];
+  let authorConditions;
+  let authorHelperConditions = [];
+  let ageConditions;
+  let ageHelperConditions = [];
+  let statusConditions;
+  let statusHelperConditions = [];
+  let theFinalValues = [];
 
-  for (const [filter, value] of filters) {
-    if (filter === "authors.name") {
-      values.push(value);
-      conditions.push(`authors.name LIKE $${values.length}`);
+  for(const [filter, ...values] of filters) {
+    if(filter === "authors.name") {
+      for(let i = 0; i < values.length; i++) {
+        theFinalValues.push(values[i]);
+        authorHelperConditions.push(`authors.name = $${theFinalValues.length}`);
+      }
+      authorConditions = authorHelperConditions.join(" OR ");
+      conditionsAll.push(authorConditions);
     }
 
-    if (filter === "authors.age") {
-      values.push(value);
-      conditions.push(`authors.age = $${values.length}`);
+    if(filter === "authors.age") {
+      for(let i = 0; i < values.length; i++) {
+        theFinalValues.push(values[i]);
+        ageHelperConditions.push(`authors.age = $${theFinalValues.length}`);
+      }
+      ageConditions = ageHelperConditions.join(" OR ");
+      conditionsAll.push(ageConditions);
     }
 
-    if (filter === "authors.status") {
-      values.push(value);
-      conditions.push(`authors.status = $${values.length}`);
+
+    if(filter === "authors.status") {
+      for(let i = 0; i < values.length; i++) {
+        theFinalValues.push(values[i]);
+        statusHelperConditions.push(`authors.status = $${theFinalValues.length}`);
+      }
+      statusConditions = statusHelperConditions.join(" OR ");
+      conditionsAll.push(statusConditions);
     }
   }
 
-  const where = conditions.length ? `WHERE ${conditions.join(" AND ")}` : "";
+  console.log("conditions all: ", conditionsAll);
+  let helperWhere = conditionsAll.join(" AND ");
+  let where = (conditionsAll.length !== 0) ? `WHERE `.concat(helperWhere) : ' ';
+
+  console.log("author conditions: ", authorConditions);
+  console.log("age conditions: ", ageConditions);
+  console.log("status conditions: ", statusConditions);
+  console.log("where: ", where)
+
+  console.log("values: ", theFinalValues);
+
+  console.log("filters: ", filters);
 
   const query = `
     SELECT authors.name AS authorName, authors.age AS authorAge, authors.status AS authorStatus, authors.authorimage as authorImage, authors.bio AS authorBio ,ARRAY_AGG(books.name) AS authorbooks FROM authors
@@ -124,7 +202,11 @@ async function getTheFilterAuthors(filters) {
         authorBio;
     `;
 
-  const { rows } = await pool.query(query, values);
+  console.log("query: ", query);
+
+  const { rows } = await pool.query(query, theFinalValues);
+
+  console.log(rows);
 
   return rows;
 }
@@ -560,6 +642,63 @@ async function findAuthorByNameCheckbox(names) {
   }
 }
 
+async function addOneCategory (categoryName, categoryFilter, categoryNameAuthor, categoryAgeAuthor, categoryStatusAuthor, categoryGenresBook) {
+  let theCompleteArray = [];
+  let nameAuthorArray = [];
+  let ageAuthorArray = [];
+  let statusAuthorArray = [];
+  let genresBookArray = [];
+
+  if(categoryNameAuthor !== undefined) {
+    nameAuthorArray = (typeof(categoryNameAuthor) === 'object') ? categoryNameAuthor : [...nameAuthorArray, categoryNameAuthor];
+    console.log("Author array: ", nameAuthorArray);
+    nameAuthorArray.unshift('authors.name');
+    console.log("Authors array complete: ", nameAuthorArray);
+    theCompleteArray.push(nameAuthorArray);
+  }
+
+  if(categoryAgeAuthor !== undefined) {
+    ageAuthorArray = (typeof(categoryAgeAuthor) === 'object') ? categoryAgeAuthor : [...ageAuthorArray, categoryAgeAuthor];
+    console.log("Age array: ", ageAuthorArray);
+    ageAuthorArray.unshift('authors.age');
+    console.log("Ages array complete: ", ageAuthorArray);
+    theCompleteArray.push(ageAuthorArray);
+  }
+
+  if(categoryStatusAuthor !== undefined) {
+    console.log("status: ", categoryStatusAuthor);
+    console.log("the object: ", typeof(categoryStatusAuthor));
+    statusAuthorArray = (typeof(categoryStatusAuthor) === 'object') ? categoryStatusAuthor : [...statusAuthorArray, categoryStatusAuthor];
+    console.log("status array: ", statusAuthorArray);
+    statusAuthorArray.unshift('authors.status');
+    console.log("Status array complete: ", statusAuthorArray);
+    theCompleteArray.push(statusAuthorArray);
+  }
+
+  if(categoryFilter === 'books') {
+    if(categoryGenresBook !== undefined) {
+      genresBookArray = (typeof(categoryGenresBook) === 'object') ? categoryGenresBook : [...genresBookArray,categoryGenresBook];
+      console.log("genres array: ", genresBookArray);
+      genresBookArray.unshift('genre.name');
+      console.log("Category array complete: ", genresBookArray);
+      theCompleteArray.push(genresBookArray);
+    }
+  }
+
+  let theFilterAdd = (categoryFilter === 'books') ? ['table', 'books'] : ['table', 'authors'];
+  theCompleteArray.unshift(theFilterAdd);
+  console.log("Array finally complete: ", theCompleteArray);
+  console.log("category name: ", categoryName);
+  let jsonArray = JSON.stringify(theCompleteArray);
+  console.log("the json array: ", jsonArray);
+
+  await pool.query(`
+    INSERT INTO Categories (category_name, category_filter)
+    VALUES
+      ($1,$2)
+    `, [categoryName, jsonArray]);
+}
+
 export {
   getAllBooks,
   getAllAuthors,
@@ -582,4 +721,5 @@ export {
   findAuthorByAgeCheckbox,
   findBookByGenreCheckbox,
   findAuthorByNameCheckbox,
+  addOneCategory,
 };

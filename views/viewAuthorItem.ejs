@@ -14,25 +14,33 @@
         <%- include('header', {categories: categories}); %>
     </header>
     <main>
-        <% authors.map((author) => { %>
-            <div class="itemInfo">
-                <img src="/placeholder_author<%= author.authorimage %>.svg" alt="Placeholder image">
-                <h3><%= author.authorname %></h3>
-                <p class="age"><span>Age: </span><%= author.authorage %></p>
-                <% let authorStatus = (author.authorstatus === true) ? "Alive" : "Dead"; %>
-                <p class="status"><span>Status: </span> <%= authorStatus %> </p>
-                <p class="bio"><span>Biography: </span><%= author.authorbio %></p>
-                <p class="books"><span>Books: </span> <% author.authorbooks.map((book, index) => { %>
-                    <% if(index === author.authorbooks.length - 1)  { %>
-                        <%= book %>
-                    <% }  else { %>
-                        <%= book %>,
-                    <% } %> 
-                <% }) %></p>
-                <button class="deleteButton">Delete</button>
-                <button class="updateButton">Update</button>
-            </div>
-        <% }); %>
+        <% if (authors.length === 0) { %>
+            <h1 class="emptyAuthor"> Oh no, there isn't an author here </h1>
+        <% } else { %>
+            <% authors.map((author) => { %>
+                <div class="itemInfo">
+                    <img src="/placeholder_author<%= author.authorimage %>.svg" alt="Placeholder image">
+                    <h3><%= author.authorname %></h3>
+                    <p class="age"><span>Age: </span><%= author.authorage %></p>
+                    <% let authorStatus = (author.authorstatus === true) ? "Alive" : "Dead"; %>
+                    <p class="status"><span>Status: </span> <%= authorStatus %> </p>
+                    <p class="bio"><span>Biography: </span><%= author.authorbio %></p>
+                    <p class="books"><span>Books: </span> <% author.authorbooks.map((book, index) => { %>
+                        <% if(index === author.authorbooks.length - 1)  { %>
+                            <%= book %>
+                        <% }  else { %>
+                            <%= book %>,
+                        <% } %> 
+                    <% }) %></p>
+                    <button class="deleteButton">Delete</button>
+                    <button class="updateButton">Update</button>
+                </div>
+            <% }); %>
+        <% } %>
+        <% if(type === "filter") { %>
+            <button id="updateCategory">Update category</button>
+            <button id="deleteCategory">Delete category</button> 
+        <% } %>
     </main>
     <footer>
         <%- include('footer') %>

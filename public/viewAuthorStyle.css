@@ -86,3 +86,35 @@ p > span {
   margin-bottom: 1rem;
   margin-top: 1rem;
 }
+
+.emptyAuthor {
+  text-align: center;
+  font-size: 5rem;
+}
+
+#deleteCategory {
+  align-self: center;
+  border-radius: 25px;
+  border: solid 2px black;
+  background-color: rgb(214, 36, 36);
+  cursor: pointer;
+  font-weight: bolder;
+  font-size: 2rem;
+  font-family: 'Courier New', Courier, monospace;
+  width: max-content;
+  padding: 5px;
+  margin-top: 30px;
+}
+
+#updateCategory {
+  align-self: center;
+  border-radius: 25px;
+  border: solid 2px black;
+  background-color: lightskyblue;
+  cursor: pointer;
+  font-weight: bolder;
+  font-size: 2rem;
+  font-family: 'Courier New', Courier, monospace;
+  width: max-content;
+  padding: 5px;
+}

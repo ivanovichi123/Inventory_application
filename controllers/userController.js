@@ -23,6 +23,7 @@ async function userBookGet(req, res) {
   res.render("viewBookItems", {
     categories: theCategories,
     books: theBooks,
+    type: "normal"
   });
 }
 
@@ -33,6 +34,7 @@ async function userAuthorGet(req, res) {
   res.render("viewAuthorItem", {
     categories: theCategories,
     authors: theAuthors,
+    type: "normal",
   });
 }
 
@@ -56,6 +58,7 @@ async function userFilterGet(req, res) {
     res.render("viewBookItems", {
       categories: theCategories,
       books: theRealFilter,
+      type: "filter",
     });
 
   } else if (theFilterGet[0].category_filter[0][1] === "authors") {
@@ -69,6 +72,7 @@ async function userFilterGet(req, res) {
     res.render("viewAuthorItem", {
       categories: theCategories,
       authors: theRealFilter,
+      type: "filter",
     });
   }
 }

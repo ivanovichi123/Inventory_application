@@ -15,14 +15,15 @@ import {
   findAuthorByAgeCheckbox,
   findBookByGenreCheckbox,
   findAuthorByNameCheckbox,
+  addOneCategory,
 } from "../db/queries.js";
 import { body, matchedData, validationResult, oneOf } from "express-validator";
 
 const validateAuthor = [
   body("nameInput")
     .trim()
-    .isAlpha("es-ES", { ignore: " " })
-    .withMessage("Name must only contain letters")
+    .matches(/^[\p{L}\p{N}\s.,:;'"!?()\-]+$/u)
+    .withMessage("Name contains invalid characters")
     .isLength({ min: 1, max: 60 })
     .withMessage("Name must be between 1 and 60 characters")
     .custom(async (value) => {
@@ -95,6 +96,8 @@ const validateCategory = [
     .withMessage("Category name must only contain letters")
     .isLength({min: 1, max: 15})
     .withMessage("Category name must be between 1 and 15 characters")
+    .not().isIn(['books', 'authors'])
+    .withMessage("The category name can not be 'authors' or 'books'")
     .custom(async (value) => {
       const existingCategoryName = await findCategoryByName(value);
       if(existingCategoryName.length !== 0) {
@@ -110,10 +113,10 @@ const validateCategory = [
   body("namesCheckbox")
     .optional({ values: undefined })
     .trim()
-    .isAlpha("es-ES", { ignore: " " })
-    .withMessage("Name/s must only contain letters")
+    .matches(/^[\p{L}\p{N}\s.,:;'"!?()\-]+$/u)
+    .withMessage("Name contains invalid characters")
     .isLength({ min: 1, max: 60 })
-    .withMessage("Name/s must be between 1 and 60 characters")
+    .withMessage("Author name/s must be between 1 and 60 characters")
     .custom(async (value) => {
     const validNameAuthor = await findAuthorByNameCheckbox(value);
       if(validNameAuthor === 0) {
@@ -294,7 +297,16 @@ const formCategoryCreatePost = [
       });
     }
     console.log("matched data: ", matchedData(req));
-    res.redirect("/books");
+    const {
+      nameCategoryInput,
+      filterRadio,
+      namesCheckbox,
+      agesCheckbox,
+      statusCheckbox,
+      genresCheckbox,
+    } = matchedData(req);
+    await addOneCategory(nameCategoryInput, filterRadio, namesCheckbox, agesCheckbox, statusCheckbox, genresCheckbox);
+    res.redirect("/");
   }
 ];
 
@@ -314,8 +326,3 @@ export {
   formUpdateGet,
   formUpdatePost,
 };
-
-
-// ACABO DE HACER LA VALIDACION PARA LAS CATEGORIAS Y CHECAR QUE FUNCIONE OESA SEGUIR COMO NORMALEMNTE L HARIA 
-// CAMBIAR LA VALIDACION DE LOS OTROS DOS FORMULARIOS PARA QUE NO SE CONFIE EN NADA DE LO QUE ME ENVIE EL USUARIO
-// CONTINUAR CON LOS BOTONES UPDATE Y DELETE
